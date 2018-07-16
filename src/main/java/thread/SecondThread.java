@@ -54,31 +54,22 @@ public class SecondThread implements Runnable
                     {
 
                         PageVo vo = new PageVo();
-
                         // 遍历 jsonarray 数组，把每一个对象转成 json 对象
                         JSONObject job = jsonArray.getJSONObject(i);
-                        // 得到 每个对象中的属性值
+                        // 得到 每个对象中的id
                         String ID = job.getString("ename");
                         vo.setId(ID);
-                        vo.setName(job.getString("tname"));
-                        //构造指向该公众号简介的网址
-                        String url = "http://c.m.163.com/nc/subscribe/abstract/" + ID + ".html";
-
                         /**
-                         * 对网址去重
+                         * 对自媒体去重
                          */
-                        if (filter.Contain(url))
+                        if (filter.Contain(ID))
                         {
-                            System.out.println("爬取到一条重复");
+                            System.out.println("爬取到一条重复"+ID);
+
                             continue;
                         }
-                        vo.setUrl(url);
 
-                        //图片url
-                        vo.setAvatarsUrl(job.getString("topic_icons"));
-                        //订阅数
-                        vo.setFanNum(job.getString("subnum"));
-
+                        System.out.println("添加一条"+ID);
                         queue.put(vo);
                     }
                 }

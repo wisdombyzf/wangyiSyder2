@@ -36,6 +36,15 @@ public class PageVo
     //标识站点，规定头条为toutiao，网易为netease，腾讯为tencent
     private String site;
 
+    private String avatarSmallUrl;     //账号头像的小图片链接
+    private String uin;       //UIN码，审核机构给注册者的验证码 string
+    private String wechat;   //微信号
+    private String recommend; //腾讯新闻字段，意义不明
+    private String lastArtUpdate;   //腾讯新闻字段，意义不明
+    private String title;       //腾讯新闻字段，意义不明
+    private String openPush;  //腾讯新闻字段，意义不明
+    private String subMenuSwitch;  //腾讯新闻字段，意义不明
+
 
     public String getId()
     {
@@ -66,7 +75,6 @@ public class PageVo
     {
         this.description = description;
     }
-
 
 
     public String getAvatarsUrl()
@@ -167,5 +175,85 @@ public class PageVo
     public void setChannel(String channel)
     {
         this.channel = channel;
+    }
+
+    public String getAvatarSmallUrl()
+    {
+        return avatarSmallUrl;
+    }
+
+    public void setAvatarSmallUrl(String avatarSmallUrl)
+    {
+        this.avatarSmallUrl = avatarSmallUrl;
+    }
+
+    public String getUin()
+    {
+        return uin;
+    }
+
+    public void setUin(String uin)
+    {
+        this.uin = uin;
+    }
+
+    public String getWechat()
+    {
+        return wechat;
+    }
+
+    public void setWechat(String wechat)
+    {
+        this.wechat = wechat;
+    }
+
+    public String getRecommend()
+    {
+        return recommend;
+    }
+
+    public void setRecommend(String recommend)
+    {
+        this.recommend = recommend;
+    }
+
+    public String getLastArtUpdate()
+    {
+        return lastArtUpdate;
+    }
+
+    public void setLastArtUpdate(String lastArtUpdate)
+    {
+        this.lastArtUpdate = lastArtUpdate;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public String getOpenPush()
+    {
+        return openPush;
+    }
+
+    public void setOpenPush(String openPush)
+    {
+        this.openPush = openPush;
+    }
+
+    public String getSubMenuSwitch()
+    {
+        return subMenuSwitch;
+    }
+
+    public void setSubMenuSwitch(String subMenuSwitch)
+    {
+        this.subMenuSwitch = subMenuSwitch;
     }
 }

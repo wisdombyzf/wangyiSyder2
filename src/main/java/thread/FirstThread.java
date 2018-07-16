@@ -10,8 +10,13 @@ import vo.PageVo;
 import java.util.concurrent.BlockingQueue;
 
 
+
+
 /**
- * 一号线程，爬取对应自媒体的简介，名称，id等信息
+ * 一号线程，爬取对应自媒体的简介，名称等信息
+ *
+ * 简介获取网址：  http://c.m.163.com/nc/subscribe/abstract/自媒体id.html
+ * 名称，别名等信息获取网址:  http://c.m.163.com/nc/subscribe/v2/topic/自媒体id.html
  */
 public class FirstThread implements Runnable
 {
@@ -44,11 +49,32 @@ public class FirstThread implements Runnable
             try
             {
                 PageVo pageVo = queue.take();
-                JSONObject jsonObject = JSONObject.fromObject(URLUtil.getJson(pageVo.getUrl()));
-
-                String desc = (String) jsonObject.get("desc");
-                System.out.println("已添加一条");
+                //构建简介获取网址
+                String  descUrl="http://c.m.163.com/nc/subscribe/abstract/"+pageVo.getId()+".html";
+                JSONObject jsonObject = JSONObject.fromObject(URLUtil.getJson(descUrl));
+                String desc = jsonObject.getString("desc");
                 pageVo.setDescription(desc);
+
+                //构建名称等信息获取网址
+                String msgUrl="http://c.m.163.com/nc/subscribe/v2/topic/"+pageVo.getId()+".html";
+                JSONObject jsonObject2 = JSONObject.fromObject(URLUtil.getJson(msgUrl));
+                JSONObject msg=jsonObject2.getJSONObject("subscribe_info");
+                pageVo.setAlias(msg.getString("alias"));
+                pageVo.setAvatarsUrl(msg.getString("topic_icons"));
+                pageVo.setName(msg.getString("tname"));
+                //将subnum中的xx万转为数字
+                String tmp=msg.getString("subnum");
+                if (tmp.length()>1&&tmp.substring(tmp.length()-1).equals("万"))
+                {
+                    float tmp2= Float.parseFloat(tmp.substring(0,tmp.length()-1));
+                    pageVo.setFanNum(String.valueOf((int) (tmp2*10000)));
+                }
+                pageVo.setUrl(msgUrl);
+                //标注为网易
+                pageVo.setSite("netease");
+
+
+
                 //储存
                 FileUtil.save(pageVo,filePath);
 
@@ -70,25 +96,17 @@ public class FirstThread implements Runnable
                     // 得到 每个对象中的属性值
                     String ID = job.getString("ename");
                     vo.setId(ID);
-                    vo.setName(job.getString("tname"));
-                    //构造指向该公众号简介的网址
-                    String url = "http://c.m.163.com/nc/subscribe/abstract/" + ID + ".html";
+
 
                     /**
                      * 对网址去重
                      */
-                    if (filter.Contain(url))
+                    if (filter.Contain(ID))
                     {
                         System.out.println("爬取到一条重复");
                         continue;
                     }
-                    vo.setUrl(url);
-
-                    //图片url
-                    vo.setAvatarsUrl(job.getString("img"));
-                    //订阅数
-                    vo.setFanNum(job.getString("subnum"));
-
+                    vo.setUrl(ID);
                     queue.put(vo);
 
                     System.out.println();
