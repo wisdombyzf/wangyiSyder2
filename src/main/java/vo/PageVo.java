@@ -15,7 +15,7 @@ public class PageVo
     private String fanNum;
 
     //头像url
-    private String avatarsUrl;
+    private String avatarUrl;
 
     //该页面url
     private String url;
@@ -77,14 +77,14 @@ public class PageVo
     }
 
 
-    public String getAvatarsUrl()
+    public String getAvatarUrl()
     {
-        return avatarsUrl;
+        return avatarUrl;
     }
 
-    public void setAvatarsUrl(String avatarsUrl)
+    public void setAvatarUrl(String avatarUrl)
     {
-        this.avatarsUrl = avatarsUrl;
+        this.avatarUrl = avatarUrl;
     }
 
     public String getUrl()

@@ -10,8 +10,9 @@ import java.util.concurrent.BlockingQueue;
 
 
 /**
- * 二号线程，爬取自媒体列表
+ * 通过网易推荐的自媒体列表，来获取的的自媒体列表（其爬取的自媒体号较少，只限定于粉丝数较多的自媒体号）
  */
+@Deprecated
 public class SecondThread implements Runnable
 {
     BlockingQueue<PageVo> queue;
@@ -43,9 +44,9 @@ public class SecondThread implements Runnable
             try
             {
                 for (int num=0;num<250;num+=20)
-                {
+                    {
                     String dataURL="http://c.m.163.com/nc/topicset/v6/recommend/android/"+num+"-20.html";
-                    JSONObject jsonObject = JSONObject.fromObject(URLUtil.getJson(dataURL));
+                    JSONObject jsonObject = JSONObject.fromObject(URLUtil.doGet(dataURL));
 
                     //获取其公众号网址列表
                     JSONArray jsonArray = jsonObject.getJSONArray("recommendList");
@@ -68,7 +69,6 @@ public class SecondThread implements Runnable
 
                             continue;
                         }
-
                         System.out.println("添加一条"+ID);
                         queue.put(vo);
                     }

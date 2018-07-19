@@ -1,14 +1,15 @@
 package spyder;
 
-import net.sf.json.JSONObject;
-import thread.FirstThread;
-import thread.SecondThread;
+import org.apache.log4j.Logger;
+import thread.getListThread;
+import thread.getMsgThread;
+import util.FileUtil;
+import util.URLUtil;
 import vo.PageVo;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -18,66 +19,54 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 public class Spyder
 {
+    private static String filePath=null;
+    private static int queueCapacity=0;
+    private static Logger logger = Logger.getLogger(Spyder.class);
 
 
     public static void main(String[] args) throws IOException
     {
+
+        List<String> stringList=URLUtil.getGB2312List();
+
         //初始化
-        BlockingQueue<PageVo> queue=new LinkedBlockingDeque<PageVo>(10000);
-        PageVo vo=new PageVo();
-        vo.setUrl("http://c.m.163.com/nc/subscribe/abstract/T1436178714849.html");
-        PageVo vo2=new PageVo();
-        vo2.setUrl("http://c.m.163.com/nc/subscribe/abstract/T1435715166386.html");
-//        PageVo vo3=new PageVo();
-//        vo3.setUrl();
+        ini();
+        BlockingQueue<PageVo> queue=new LinkedBlockingDeque<PageVo>(queueCapacity);
 
-//        try
-//        {
-//            queue.put(vo);
-//            queue.put(vo2);
-//
-//        } catch (InterruptedException e)
-//        {
-//            e.printStackTrace();
-//        }
-        FirstThread firstThread=new FirstThread(queue);
-        SecondThread secondThread=new SecondThread(queue);
-        new Thread(secondThread,"目录线程").start();
+        getMsgThread getMsgThread =new getMsgThread(queue,filePath);
 
-        for (int i=0;i<10;i++)
+        //每个目录线程含多少搜索关键词
+        int onePageNum=stringList.size()/100;
+        for (int i=0;i<stringList.size();i+=onePageNum)
         {
-            new  Thread(firstThread,i+"号线程").start();
+            getListThread getListThread =new getListThread(
+                    queue,stringList.subList(i,Math.min(i+onePageNum,stringList.size())));
+            new Thread(getListThread,i+"号目录线程").start();
         }
 
-
-
+        for (int i=0;i<800;i++)
+        {
+            new  Thread(getMsgThread,i+"号信息线程").start();
+        }
     }
 
 
-
-
     /**
-     * 将json字符串转map
-     *
-     * @param object
-     * @return
+     * 初次化，读取配置文件
      */
-    private Map<String, String> toMap(Object object)
+    public static void ini()
     {
-        Map<String, String> data = new HashMap<String, String>();
-        // 将json字符串转换成jsonObject
-        JSONObject jsonObject = JSONObject.fromObject(object);
-        Iterator ite = jsonObject.keys();
-        // 遍历jsonObject数据,添加到Map对象
-        while (ite.hasNext())
+        Properties properties = FileUtil.LoadConfig();
+
+        try
         {
-            String key = ite.next().toString();
-            String value = jsonObject.get(key).toString();
-            data.put(key, value);
+            filePath=properties.getProperty("FilePath");
+            queueCapacity= Integer.parseInt(properties.getProperty("queueCapacity"));
+        }catch (Exception e)
+        {
+            logger.error("配置文件数据有误");
+            System.exit(-1);
         }
-        // 或者直接将 jsonObject赋值给Map
-        // data = jsonObject;
-        return data;
     }
 
 
