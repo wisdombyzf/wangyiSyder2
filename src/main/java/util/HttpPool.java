@@ -12,7 +12,6 @@ import org.apache.http.protocol.HttpContext;
  * httpclient连接池。。。解决HttpClient引起的TCP连接数高问题
  *
  */
-
 public class HttpPool
 {
 

@@ -6,10 +6,13 @@ import java.util.*;
 
 /**
  * url去重，暂时利用set
+ * @author zf
  */
 public class Filter
 {
-    //利用synchronizedSet使set线程安全
+    /**
+     * 利用synchronizedSet使set线程安全
+     */
     private static Set<String> set= Collections.synchronizedSet(new HashSet<String>());
 
     /**
@@ -18,7 +21,7 @@ public class Filter
      * @param url
      * @return
      */
-    public boolean Contain(String url)
+    public boolean contain(String url)
     {
         if (set.contains(url))
         {
@@ -56,10 +59,8 @@ public class Filter
             String value = jsonObject.get(key).toString();
             data.put(key, value);
         }
-
         return data;
     }
-
 
 
 }

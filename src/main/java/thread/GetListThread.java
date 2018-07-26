@@ -1,11 +1,11 @@
 package thread;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.Filter;
-import util.URLUtil;
+import util.UrlUtil;
 import vo.PageVo;
 
 import java.util.List;
@@ -14,13 +14,14 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  * 通过网易app搜索引擎获取自媒体名单
+ * @author zf
  */
-public class getListThread implements Runnable
+public class GetListThread implements Runnable
 {
     BlockingQueue<PageVo> queue;
-    Filter filter;
+    private Filter filter;
     private List<String> stringList;
-    private static Logger logger=Logger.getLogger(getListThread.class);
+    private static final Logger LOGGER =LoggerFactory.getLogger(GetListThread.class);
 
 
     /**
@@ -28,11 +29,11 @@ public class getListThread implements Runnable
      *
      * @param queue
      */
-    public getListThread(BlockingQueue<PageVo> queue)
+    public GetListThread(BlockingQueue<PageVo> queue)
     {
         this.queue = queue;
         filter = new Filter();
-        stringList=URLUtil.getGB2312List();
+        stringList=UrlUtil.getGB2312List();
     }
 
     /**
@@ -41,7 +42,7 @@ public class getListThread implements Runnable
      * @param queue
      * @param stringList 关键词字符集合
      */
-    public getListThread(BlockingQueue<PageVo> queue,List<String> stringList)
+    public GetListThread(BlockingQueue<PageVo> queue, List<String> stringList)
     {
         this.queue = queue;
         filter = new Filter();
@@ -65,7 +66,7 @@ public class getListThread implements Runnable
                 num += 20;
                 try
                 {
-                    data = URLUtil.doPost(httpUrl, "keyWord=" + URLUtil.getEncodedBase64(s));
+                    data = UrlUtil.doPost(httpUrl, "keyWord=" + UrlUtil.getEncodedBase64(s));
                     JSONObject jsonObject = JSONObject.fromObject(data);
                     //获取其他公众号网址
                     JSONArray jsonArray = jsonObject.getJSONArray("result");
@@ -89,9 +90,9 @@ public class getListThread implements Runnable
                         /**
                          * 对网址去重
                          */
-                        if (filter.Contain(ID))
+                        if (filter.contain(ID))
                         {
-                            //logger.debug("爬取到一条重复记录"+ID);
+                            //LOGGER.debug("爬取到一条重复记录"+ID);
                             continue;
                         }
                         vo.setUrl(ID);
@@ -102,9 +103,9 @@ public class getListThread implements Runnable
                     e.printStackTrace();
                 }
             }
-            logger.debug("已爬取"+filter.getUrlNum()+"条数据，队列容量="+queue.remainingCapacity());
+            LOGGER.debug("已爬取"+filter.getUrlNum()+"条数据，队列容量="+queue.remainingCapacity());
         }
-        logger.debug("线程" + Thread.currentThread().getName()+"终止");
+        LOGGER.debug("线程" + Thread.currentThread().getName()+"终止");
     }
 
 

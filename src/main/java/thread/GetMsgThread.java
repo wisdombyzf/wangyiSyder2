@@ -1,9 +1,10 @@
 package thread;
 
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.FileUtil;
-import util.Filter;
-import util.URLUtil;
+import util.UrlUtil;
 import vo.PageVo;
 
 import java.util.concurrent.BlockingQueue;
@@ -16,20 +17,24 @@ import java.util.concurrent.BlockingQueue;
  *
  * 简介获取网址：  http://c.m.163.com/nc/subscribe/abstract/自媒体id.html
  * 名称，别名等信息获取网址:  http://c.m.163.com/nc/subscribe/v2/topic/自媒体id.html
+ *
+ * @author zf
  */
-public class getMsgThread implements Runnable
+public class GetMsgThread implements Runnable
 {
     BlockingQueue<PageVo> queue;
-    Filter filter;
-    //文件储存的路径
+    /**
+     * 文件储存的路径
+     */
     private String filePath="";
 
+    private static final Logger LOGGER=LoggerFactory.getLogger(GetMsgThread.class);
 
 
-    public getMsgThread(BlockingQueue<PageVo> queue,String filePath)
+
+    public GetMsgThread(BlockingQueue<PageVo> queue, String filePath)
     {
         this.queue = queue;
-        filter = new Filter();
         this.filePath=filePath;
     }
 
@@ -43,13 +48,13 @@ public class getMsgThread implements Runnable
                 PageVo pageVo = queue.take();
                 //构建简介获取网址
                 String  descUrl="http://c.m.163.com/nc/subscribe/abstract/"+pageVo.getId()+".html";
-                JSONObject jsonObject = JSONObject.fromObject(URLUtil.doGet(descUrl));
+                JSONObject jsonObject = JSONObject.fromObject(UrlUtil.doGet(descUrl));
                 String desc = jsonObject.getString("desc");
                 pageVo.setDescription(desc);
 
                 //构建名称等信息获取网址
                 String msgUrl="http://c.m.163.com/nc/subscribe/v2/topic/"+pageVo.getId()+".html";
-                JSONObject jsonObject2 = JSONObject.fromObject(URLUtil.doGet(msgUrl));
+                JSONObject jsonObject2 = JSONObject.fromObject(UrlUtil.doGet(msgUrl));
                 JSONObject msg=jsonObject2.getJSONObject("subscribe_info");
                 pageVo.setAlias(msg.getString("alias"));
                 pageVo.setAvatarUrl(msg.getString("topic_icons"));
@@ -97,7 +102,7 @@ public class getMsgThread implements Runnable
 //                    /**
 //                     * 对网址去重
 //                     */
-//                    if (filter.Contain(ID))
+//                    if (filter.contain(ID))
 //                    {
 //                        System.out.println("爬取到一条重复");
 //                        continue;

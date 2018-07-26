@@ -1,7 +1,8 @@
 package util;
 
 import net.sf.json.JSONObject;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import vo.PageVo;
 
 import java.io.*;
@@ -11,6 +12,7 @@ import java.util.Properties;
 
 /**
  * 文件工具类
+ * @author zf
  */
 public class FileUtil
 {
@@ -18,7 +20,7 @@ public class FileUtil
     static private Date date=new Date();
     static private long time=date.getTime();
     static private String fileName;
-    private static Logger logger=Logger.getLogger(FileUtil.class);
+    private static final Logger LOGGER =LoggerFactory.getLogger(FileUtil.class);
 
 
     /**
@@ -54,7 +56,7 @@ public class FileUtil
                 file.createNewFile();
             } catch (IOException e)
             {
-                logger.error("新建文件出错");
+                LOGGER.error("新建文件出错");
             }
 
         }
@@ -133,7 +135,7 @@ public class FileUtil
 
     public void getPath()
     {
-        File directory = new File("");// 参数为空
+        File directory = new File("");
         String courseFile;
         try
         {
@@ -190,7 +192,7 @@ public class FileUtil
             p.load(in);
         } catch (IOException e)
         {
-            logger.error("加载配置文件出错");
+            LOGGER.error("加载配置文件出错");
             e.printStackTrace();
         }
         return p;

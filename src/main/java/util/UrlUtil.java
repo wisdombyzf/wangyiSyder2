@@ -9,13 +9,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,11 +22,12 @@ import java.util.List;
 
 /**
  * 根据对应URL下载对应json
+ * @author zf
  */
-public class URLUtil
+public class UrlUtil
 {
 
-    private static Logger logger=Logger.getLogger(URLUtil.class);
+    private static final Logger logger=LoggerFactory.getLogger(UrlUtil.class);
     /**
      * 通过get方法获取对应url的json数据
      *
@@ -72,14 +72,6 @@ public class URLUtil
                     e.printStackTrace();
                 }
             }
-            // 相当于关闭浏览器
-//            try
-//            {
-//                httpclient.close();
-//            } catch (IOException e)
-//            {
-//                e.printStackTrace();
-//            }
         }
         return result.toString();
     }
@@ -95,7 +87,8 @@ public class URLUtil
     public static String doPost(String url, String params) throws Exception
     {
         CloseableHttpClient httpclient=HttpPool.getHttpClient();
-        HttpPost httpPost = new HttpPost(url);// 创建httpPost
+        // 创建httpPost
+        HttpPost httpPost = new HttpPost(url);
         //设置请求头
         httpPost.setHeader("User-C", "6K6i6ZiF");
         httpPost.setHeader("Add-To-Queue-Millis", "1531722537");
@@ -116,7 +109,6 @@ public class URLUtil
         StringEntity entity = new StringEntity(params, charSet);
         httpPost.setEntity(entity);
         CloseableHttpResponse response = null;
-        //System.out.println(httpPost.toString());
         try
         {
 
@@ -126,8 +118,7 @@ public class URLUtil
             if (state == HttpStatus.SC_OK)
             {
                 HttpEntity responseEntity = response.getEntity();
-                String jsonString = EntityUtils.toString(responseEntity);
-                return jsonString;
+                return EntityUtils.toString(responseEntity);
             } else
             {
                 logger.warn("");
@@ -144,13 +135,6 @@ public class URLUtil
                     e.printStackTrace();
                 }
             }
-//            try
-//            {
-//                httpclient.close();
-//            } catch (IOException e)
-//            {
-//                e.printStackTrace();
-//            }
         }
         return null;
     }

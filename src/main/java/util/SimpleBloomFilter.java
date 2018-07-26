@@ -4,19 +4,30 @@ import java.util.BitSet;
 
 /**
  * 最最原始的布隆过滤器类
+ * @author zf
  */
 public class SimpleBloomFilter
 {
-    // 设置布隆过滤器的大小
+    /**
+     * 设置布隆过滤器的大小
+     */
     private static final int DEFAULT_SIZE = 2 << 24;
-    // 产生随机数的种子，可产生6个不同的随机数产生器。。。而且最好取素数
+    /**
+     * 产生随机数的种子，可产生6个不同的随机数产生器。。。而且最好取素数
+     */
     private static final int[] seeds = new int[]{7, 11, 13, 31, 37, 61};
-    // Java中的按位存储的思想，其算法的具体实现（布隆过滤器）
+    /**
+     * Java中的按位存储的思想，其算法的具体实现（布隆过滤器）
+     */
     private BitSet bits = new BitSet(DEFAULT_SIZE);
-    // 根据随机数的种子，创建6个哈希函数
+    /**
+     * 根据随机数的种子，创建6个哈希函数
+     */
     private SimpleHash[] func = new SimpleHash[seeds.length];
 
-    // 设置布隆过滤器所对应k（6）个哈希函数
+    /**
+     * 设置布隆过滤器所对应k（6）个哈希函数
+     */
     public SimpleBloomFilter()
     {
         for (int i = 0; i < seeds.length; i++)
@@ -25,15 +36,6 @@ public class SimpleBloomFilter
         }
     }
 
-    public static void main(String[] args)
-    {
-        SimpleBloomFilter filter = new SimpleBloomFilter();
-        filter.add("123");
-        System.out.println(filter.contains("123"));
-        System.out.println(filter.contains("124"));
-        filter.add("124");
-        System.out.println(filter.contains("124"));
-    }
 
 
     /**
@@ -78,7 +80,11 @@ public class SimpleBloomFilter
         private int cap;
         private int seed;
 
-        // 默认构造器，哈希表长默认为DEFAULT_SIZE大小，此哈希函数的种子为seed
+        /**
+         * 默认构造器，哈希表长默认为DEFAULT_SIZE大小，此哈希函数的种子为seed
+         * @param cap
+         * @param seed
+         */
         public SimpleHash(int cap, int seed)
         {
             this.cap = cap;

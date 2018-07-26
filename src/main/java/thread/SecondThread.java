@@ -3,7 +3,7 @@ package thread;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.Filter;
-import util.URLUtil;
+import util.UrlUtil;
 import vo.PageVo;
 
 import java.util.concurrent.BlockingQueue;
@@ -46,7 +46,7 @@ public class SecondThread implements Runnable
                 for (int num=0;num<250;num+=20)
                     {
                     String dataURL="http://c.m.163.com/nc/topicset/v6/recommend/android/"+num+"-20.html";
-                    JSONObject jsonObject = JSONObject.fromObject(URLUtil.doGet(dataURL));
+                    JSONObject jsonObject = JSONObject.fromObject(UrlUtil.doGet(dataURL));
 
                     //获取其公众号网址列表
                     JSONArray jsonArray = jsonObject.getJSONArray("recommendList");
@@ -63,7 +63,7 @@ public class SecondThread implements Runnable
                         /**
                          * 对自媒体去重
                          */
-                        if (filter.Contain(ID))
+                        if (filter.contain(ID))
                         {
                             System.out.println("爬取到一条重复"+ID);
 

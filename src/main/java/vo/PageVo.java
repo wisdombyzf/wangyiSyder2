@@ -5,45 +5,95 @@ package vo;
  */
 public class PageVo
 {
-    //自媒体id
+    /**
+     * 自媒体id
+     */
     private String id;
-    //名称
+    /**
+     * 名称
+     */
     private String name;
-    //简介or描述
+    /**
+     * 简介or描述
+     */
     private String description;
-    //被关注数,粉丝数
+    /**
+     * 被关注数,粉丝数
+     */
     private String fanNum;
 
-    //头像url
+    /**
+     * 头像url
+     */
     private String avatarUrl;
 
-    //该页面url
+    /**
+     * 该页面url
+     */
     private String url;
-    //所属频道或类别（例如娱乐、财经、美食）string
+    /**
+     * 所属频道或类别（例如娱乐、财经、美食）string
+     */
     private String channel;
-    //自媒体关注其他账号的数量...网易新闻无
+    /**
+     * 自媒体关注其他账号的数量...网易新闻无
+     */
     private String follow;
-    //点赞数...网易新闻无
+    /**
+     * 点赞数...网易新闻无
+     */
     private String likeCount;
-    //认证信息 string(例如优质视频原创作者) ...网易新闻无
+    /**
+     * 认证信息 string(例如优质视频原创作者) ...网易新闻无
+     */
     private String authInfo;
-    //自媒体账号发布的文章数或动态数 int
+    /**
+     * 自媒体账号发布的文章数或动态数 int
+     */
     private String publicationNum;
 
-    //自媒体的别名或者说一句话简介
+    /**
+     * 自媒体的别名或者说一句话简介
+     */
     private String alias;
 
-    //标识站点，规定头条为toutiao，网易为netease，腾讯为tencent
+    /**
+     * 标识站点，规定头条为toutiao，网易为netease，腾讯为tencent
+     */
     private String site;
 
-    private String avatarSmallUrl;     //账号头像的小图片链接
-    private String uin;       //UIN码，审核机构给注册者的验证码 string
-    private String wechat;   //微信号
-    private String recommend; //腾讯新闻字段，意义不明
-    private String lastArtUpdate;   //腾讯新闻字段，意义不明
-    private String title;       //腾讯新闻字段，意义不明
-    private String openPush;  //腾讯新闻字段，意义不明
-    private String subMenuSwitch;  //腾讯新闻字段，意义不明
+    /**
+     * 账号头像的小图片链接
+     */
+    private String avatarSmallUrl;
+    /**
+     * UIN码，审核机构给注册者的验证码 string
+     */
+    private String uin;
+    /**
+     * 微信号
+     */
+    private String wechat;
+    /**
+     * 腾讯新闻字段，意义不明
+     */
+    private String recommend;
+    /**
+     * 腾讯新闻字段，意义不明
+     */
+    private String lastArtUpdate;
+    /**
+     * 腾讯新闻字段，意义不明
+     */
+    private String title;
+    /**
+     * 腾讯新闻字段，意义不明
+     */
+    private String openPush;
+    /**
+     * 腾讯新闻字段，意义不明
+     */
+    private String subMenuSwitch;
 
 
     public String getId()
